@@ -30,10 +30,100 @@ var wsServer = new _websocket.server({
 	httpServer: server
 });
 
+var history = [];
+var clients = [];
+
 wsServer.on('request', function (r) {
+	var _this = this;
+
 	var connection = r.accept(null, r.origin);
+
+	var clientIndex = clients.push(connection) - 1;
+	var name = void 0,
+	    color = void 0;
 
 	console.log('Connection Accepted');
 
-	connection.on('message');
+	// If there are existing messages, send them to the newly connected user
+	if (history.length > 0) {
+		connection.sendUTF(JSON.stringify({ type: 'history', data: history }));
+	}
+
+	// Create an event listener
+	connection.on('message', function (message) {
+		if (message.type !== 'utf8') return;
+
+		// First message will always be the users name
+		if (!name) {
+			name = message.utf8Data;
+			color = randomColorString();
+
+			var data = { type: 'color', data: color };
+			connection.send(JSON.stringify(data));
+
+			console.log('[' + new Date() + '] New User: ' + name + ', Color: ' + color);
+		}
+
+		// Other messages will be a chat message
+		else {
+				(function () {
+					console.log('Received message from ' + user + ': ' + message.utf8Data);
+
+					var chatMessage = {
+						timestamp: Date.now(),
+						time: timeString(_this.timestamp),
+						text: message.utf8Data,
+						author: userName,
+						color: userColor
+					};
+
+					// Add the message to the chat history
+					history.push(chatMessage);
+					// Remove old message if there are more than 100
+					history = history.slice(-100);
+
+					// Send new message to all clients
+					var data = { type: 'message', data: chatMessage };
+					clients.forEach(function (client) {
+						return client.sendUTF(JSON.stringify(data));
+					});
+				})();
+			}
+	});
+
+	connection.on('close', function (connection) {
+		// If there is a user with a name
+		if (name !== false) {
+			console.log('[' + new Date() + ']: Peer ' + connection.remoteAddress + ' disconnected.');
+			// Remove use from client list
+			clients.splice(index, 1);
+		}
+
+		// User exited before choosing a name
+		else {
+				console.log('SOMEONE EXITED BEFORE INITIALISNG');
+			}
+	});
 });
+
+// Helper functions
+
+// Returns a random int in [a, b]
+function randomInt(a, b) {
+	return Math.floor(Math.random() * (b + 1) + a);
+}
+
+function randomColorString() {
+	return 'rgb(' + randomInt(0, 255) + ', ' + randomInt(0, 255) + ', ' + randomInt(0, 255) + ')';
+}
+
+function timeString(timestamp) {
+	var date = new Date(timestamp);
+	var day = date.getDate();
+	var month = date.getMonth() + 1;
+	var year = (date.getFullYear() + 1 + "").slice(2);
+	var hour = date.getHours();
+	var min = date.getMinute();
+
+	return day + '/' + month + '/' + year + ' : ' + hour + '/' + min;
+}
