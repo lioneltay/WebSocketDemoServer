@@ -1,10 +1,15 @@
 import http from 'http'
+import express from 'express'
 import { server as WebSocketServer } from 'websocket'
 
-const server = http.createServer((req, res) => {
-	console.log('Wow a HTTP request!')
-	res.send('Wow a HTTP request!')
+const app = express()
+
+app.use('*', (req, res) => {
+	console.log('Wow a http request.')
+	res.send('Wow a http request.')
 })
+
+const server = http.createServer(app)
 
 const PORT = process.env.PORT || 8000
 server.listen(PORT, () => console.log(`Server is listening on port ${PORT}`))
