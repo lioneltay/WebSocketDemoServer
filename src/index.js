@@ -30,10 +30,8 @@ wsServer.on('request', function(r) {
 	
 	console.log('Connection Accepted')
 	
-	// If there are existing messages, send them to the newly connected user
-	if(history.length > 0) {
-		connection.sendUTF(JSON.stringify({ type: 'history', data: history }))
-	}
+	// Send existing messages to the newly connected user
+	connection.sendUTF(JSON.stringify({ type: 'history', data: history }))
 	
 	// Create an event listener
 	connection.on('message', (message) => {
