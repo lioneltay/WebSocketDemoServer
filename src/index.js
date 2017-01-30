@@ -56,7 +56,6 @@ wsServer.on('request', function(r) {
 			
 			const chatMessage = {
 				timestamp: Date.now(),
-				time: timeString(this.timestamp),
 				text: message.utf8Data,
 				author: name,
 				color,
@@ -102,17 +101,6 @@ function randomInt(a,b) {
 
 function randomColorString() {
 	return `rgb(${randomInt(0,255)}, ${randomInt(0,255)}, ${randomInt(0,255)})`
-}
-
-function timeString(timestamp) {
-	const date = new Date(timestamp)
-	const day = date.getDate()
-	const month = date.getMonth() + 1
-	const year = (date.getFullYear() + 1 + "").slice(2)
-	const hour = date.getHours()
-	const min = date.getMinutes()
-	
-	return `${day}/${month}/${year} : ${hour}/${min}`
 }
 
 

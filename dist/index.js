@@ -34,8 +34,6 @@ var history = [];
 var clients = [];
 
 wsServer.on('request', function (r) {
-	var _this = this;
-
 	var connection = r.accept(null, r.origin);
 
 	var clientIndex = clients.push(connection) - 1;
@@ -71,7 +69,6 @@ wsServer.on('request', function (r) {
 
 					var chatMessage = {
 						timestamp: Date.now(),
-						time: timeString(_this.timestamp),
 						text: message.utf8Data,
 						author: name,
 						color: color
@@ -115,15 +112,4 @@ function randomInt(a, b) {
 
 function randomColorString() {
 	return 'rgb(' + randomInt(0, 255) + ', ' + randomInt(0, 255) + ', ' + randomInt(0, 255) + ')';
-}
-
-function timeString(timestamp) {
-	var date = new Date(timestamp);
-	var day = date.getDate();
-	var month = date.getMonth() + 1;
-	var year = (date.getFullYear() + 1 + "").slice(2);
-	var hour = date.getHours();
-	var min = date.getMinutes();
-
-	return day + '/' + month + '/' + year + ' : ' + hour + '/' + min;
 }
