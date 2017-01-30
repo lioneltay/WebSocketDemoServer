@@ -67,14 +67,14 @@ wsServer.on('request', function (r) {
 		// Other messages will be a chat message
 		else {
 				(function () {
-					console.log('Received message from ' + user + ': ' + message.utf8Data);
+					console.log('Received message from ' + name + ': ' + message.utf8Data);
 
 					var chatMessage = {
 						timestamp: Date.now(),
 						time: timeString(_this.timestamp),
 						text: message.utf8Data,
-						author: userName,
-						color: userColor
+						author: name,
+						color: color
 					};
 
 					// Add the message to the chat history
@@ -96,7 +96,7 @@ wsServer.on('request', function (r) {
 		if (name !== false) {
 			console.log('[' + new Date() + ']: Peer ' + connection.remoteAddress + ' disconnected.');
 			// Remove use from client list
-			clients.splice(index, 1);
+			clients.splice(clientIndex, 1);
 		}
 
 		// User exited before choosing a name
@@ -123,7 +123,7 @@ function timeString(timestamp) {
 	var month = date.getMonth() + 1;
 	var year = (date.getFullYear() + 1 + "").slice(2);
 	var hour = date.getHours();
-	var min = date.getMinute();
+	var min = date.getMinutes();
 
 	return day + '/' + month + '/' + year + ' : ' + hour + '/' + min;
 }

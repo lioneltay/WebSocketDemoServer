@@ -52,14 +52,14 @@ wsServer.on('request', function(r) {
 		
 		// Other messages will be a chat message
 		else {
-			console.log(`Received message from ${user}: ${message.utf8Data}`)
+			console.log(`Received message from ${name}: ${message.utf8Data}`)
 			
 			const chatMessage = {
 				timestamp: Date.now(),
 				time: timeString(this.timestamp),
 				text: message.utf8Data,
-				author: userName,
-				color: userColor,
+				author: name,
+				color,
 			}
 			
 			// Add the message to the chat history
@@ -78,7 +78,7 @@ wsServer.on('request', function(r) {
 		if (name !== false ) {
 			console.log(`[${new Date()}]: Peer ${connection.remoteAddress} disconnected.`)
 			// Remove use from client list
-			clients.splice(index, 1)
+			clients.splice(clientIndex, 1)
 		} 
 		
 		// User exited before choosing a name
@@ -110,7 +110,7 @@ function timeString(timestamp) {
 	const month = date.getMonth() + 1
 	const year = (date.getFullYear() + 1 + "").slice(2)
 	const hour = date.getHours()
-	const min = date.getMinute()
+	const min = date.getMinutes()
 	
 	return `${day}/${month}/${year} : ${hour}/${min}`
 }
