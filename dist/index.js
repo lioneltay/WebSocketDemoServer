@@ -21,7 +21,7 @@ var app = (0, _express2.default)();
 
 app.use('*', function (req, res) {
 	console.log('Wow a http request.');
-	res.send('Wow a http request.');
+	res.send('Websockets-Demo. Not much of a http server here. <a href="http://codepen.io/LionelTay/full/wgpgZK">See the demo</a>.');
 });
 
 var server = _http2.default.createServer(app);

@@ -12,7 +12,7 @@ const app = express()
 
 app.use('*', (req, res) => {
 	console.log('Wow a http request.')
-	res.send('Wow a http request.')
+	res.send('Websockets-Demo. Not much of a http server here. <a href="http://codepen.io/LionelTay/full/wgpgZK">See the demo</a>.')
 })
 
 const server = http.createServer(app)
