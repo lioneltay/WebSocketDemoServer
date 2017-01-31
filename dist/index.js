@@ -12,6 +12,11 @@ var _websocket = require('websocket');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+// Keep server alive, chat history is stored in memory
+setInterval(function () {
+	_http2.default.get("http://stream-chat-demo.herokuapp.com");
+}, 300000);
+
 var app = (0, _express2.default)();
 
 app.use('*', function (req, res) {

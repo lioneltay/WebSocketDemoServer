@@ -2,6 +2,12 @@ import http from 'http'
 import express from 'express'
 import { server as WebSocketServer } from 'websocket'
 
+
+// Keep server alive, chat history is stored in memory
+setInterval(function() {
+	http.get("http://stream-chat-demo.herokuapp.com");
+}, 300000);
+
 const app = express()
 
 app.use('*', (req, res) => {
